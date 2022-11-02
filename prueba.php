@@ -71,7 +71,11 @@
             $saldo = $fila->saldo;
             $img = "<a class='link_borrar' href='borrar.php?codigo=$codigo'><img width='32px' src='https://cdn-icons-png.flaticon.com/512/1214/1214428.png'></a>";
             $imgEditar="<a class='link_editar' href='editar_cliente.php?codigo=$codigo'><img width='32px' src='https://iconarchive.com/download/i60504/custom-icon-design/pretty-office-9/edit-validated.ico'></a>";
-            echo "<tr data-id='$codigo'><td >$codigo</td><td contenteditable>$empresa </td><td>$saldo</td><td >$img</td><td >$imgEditar</td></tr>\n";
+            
+            $urlSubir="<a href='saldo.php?codigo=$codigo&cantidad=100'>Subir </a>";
+            $urlBajar="<a href='saldo.php?codigo=$codigo&cantidad=-100'>Bajar </a>";
+            
+            echo "<tr data-id='$codigo'><td >$codigo</td><td contenteditable>$empresa </td><td>$saldo $urlBajar $urlSubir</td><td >$img</td><td >$imgEditar</td></tr>\n";
         }
         echo "</tbody></table>";
     } else {
