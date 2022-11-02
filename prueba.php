@@ -30,7 +30,7 @@
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
-<div class='panel'>
+<div class='panel' >
 
 <a href="insertar_cliente.html" class="btn btn-primary">Insertar Cliente</a>
 
