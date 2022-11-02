@@ -61,16 +61,17 @@
         //imprimir registros
         $i = 1;
         echo "<table id='tabla_clientes' style='margin: 100px; padding: 100px;' class='table table-striped table-bordered'>";
-        echo "<thead><tr><th>Código</th><th>Empresa</th><th>Borrar</th><th>Editar</th></tr></thead>";
+        echo "<thead><tr><th>Código</th><th>Empresa</th><th>Saldo</th><th>Borrar</th><th>Editar</th></tr></thead>";
         echo "<tbody>";
         while ($fila = $resultado->fetch_object()) {
             $i++;
             $ip = 23;
             $codigo = $fila->codigo;
             $empresa = $fila->empresa;
+            $saldo = $fila->saldo;
             $img = "<a class='link_borrar' href='borrar.php?codigo=$codigo'><img width='32px' src='https://cdn-icons-png.flaticon.com/512/1214/1214428.png'></a>";
             $imgEditar="<a class='link_editar' href='editar_cliente.php?codigo=$codigo'><img width='32px' src='https://iconarchive.com/download/i60504/custom-icon-design/pretty-office-9/edit-validated.ico'></a>";
-            echo "<tr data-id='$codigo'><td >$codigo</td><td contenteditable>$empresa </td><td >$img</td><td >$imgEditar</td></tr>\n";
+            echo "<tr data-id='$codigo'><td >$codigo</td><td contenteditable>$empresa </td><td>$saldo</td><td >$img</td><td >$imgEditar</td></tr>\n";
         }
         echo "</tbody></table>";
     } else {
