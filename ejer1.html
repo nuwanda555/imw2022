@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div id="panel">
+    </div>
+
+
+</body>
+    <script>
+        //mostrar en panel un reloj con la hora actual
+        //actualizar cada segundo
+        //mostrar en panel un reloj con la hora actual
+        //actualizar cada segundo
+        let panel = document.getElementById("panel");
+        let reloj = new Date();
+        let hora = reloj.getHours();
+        let minutos = reloj.getMinutes();
+        let segundos = reloj.getSeconds();
+        panel.innerHTML = hora + ":" + minutos + ":" + segundos;
+        setInterval(function(){
+            reloj = new Date();
+            hora = reloj.getHours();
+            minutos = reloj.getMinutes();
+            segundos = reloj.getSeconds();
+            panel.innerHTML = hora + ":" + minutos + ":" + segundos;
+        }, 1000);
+
+    </script>
+
+
+</html>
