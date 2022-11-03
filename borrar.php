@@ -18,6 +18,6 @@
 
     $conexion->close();
 
-    header('Location: prueba.php');
+    header('Location: clientes.php');
 
 ?>
