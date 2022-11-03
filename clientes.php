@@ -51,7 +51,7 @@
     $conexion->set_charset("utf8");
 
     //consulta
-    $consulta = "SELECT * FROM clientes2";
+    $consulta = "SELECT *,c.id as cid,count(*) total FROM clientes2 c, pedidos p WHERE c.id = p.cliente_id group by c.id";
 
     //ejecutar consulta
     $resultado = $conexion->query($consulta);
@@ -61,7 +61,7 @@
         //imprimir registros
         $i = 1;
         echo "<table id='tabla_clientes' style='margin: 100px; padding: 100px;' class='table table-striped table-bordered'>";
-        echo "<thead><tr><th>Código</th><th>Empresa</th><th>Saldo</th><th>Borrar</th><th>Editar</th></tr></thead>";
+        echo "<thead><tr><th>Id</th><th>Código</th><th>Empresa</th><th>Saldo</th><th>Total</th><th>Borrar</th><th>Editar</th></tr></thead>";
         echo "<tbody>";
         while ($fila = $resultado->fetch_object()) {
             $i++;
@@ -69,13 +69,16 @@
             $codigo = $fila->codigo;
             $empresa = $fila->empresa;
             $saldo = $fila->saldo;
+            $total = $fila->total;
+            $id = $fila->cid;
+
             $img = "<a class='link_borrar' href='borrar.php?codigo=$codigo'><img width='32px' src='https://cdn-icons-png.flaticon.com/512/1214/1214428.png'></a>";
             $imgEditar="<a class='link_editar' href='editar_cliente.php?codigo=$codigo'><img width='32px' src='https://iconarchive.com/download/i60504/custom-icon-design/pretty-office-9/edit-validated.ico'></a>";
             
             $urlSubir="<a href='saldo.php?codigo=$codigo&cantidad=100'>Subir </a>";
             $urlBajar="<a href='saldo.php?codigo=$codigo&cantidad=-100'>Bajar </a>";
             
-            echo "<tr data-id='$codigo'><td >$codigo</td><td contenteditable>$empresa </td><td>$saldo $urlBajar $urlSubir</td><td >$img</td><td >$imgEditar</td></tr>\n";
+            echo "<tr data-id='$codigo'><td>$id</td><td >$codigo</td><td contenteditable>$empresa </td><td>$saldo $urlBajar $urlSubir</td><td>$total</td><td >$img</td><td >$imgEditar</td></tr>\n";
         }
         echo "</tbody></table>";
     } else {
