@@ -78,7 +78,10 @@
             $urlSubir="<a href='saldo.php?codigo=$codigo&cantidad=100'>Subir </a>";
             $urlBajar="<a href='saldo.php?codigo=$codigo&cantidad=-100'>Bajar </a>";
             
-            echo "<tr data-id='$codigo'><td>$id</td><td >$codigo</td><td contenteditable>$empresa </td><td>$saldo $urlBajar $urlSubir</td><td>$total</td><td >$img</td><td >$imgEditar</td></tr>\n";
+            $urlPedidos="<a href='pedidos.php?cliente_id=$id'>$total</a>";
+
+
+            echo "<tr data-id='$codigo'><td>$id</td><td >$codigo</td><td contenteditable>$empresa </td><td>$saldo $urlBajar $urlSubir</td><td>$urlPedidos</td><td >$img</td><td >$imgEditar</td></tr>\n";
         }
         echo "</tbody></table>";
     } else {
