@@ -38,7 +38,7 @@
             html+="</tr>";   
         }
         html += "</table>";
-        $("#"+id).append(html);
+        $("#"+id).html(html);
     }
 
 
@@ -57,8 +57,17 @@
         tabla(20,20,"panel");
         botones(30);
 
-        //Al pulsar el botón 0 poner de color azul todas las celdas que contienen numeros pares.
+        //al pulsar botón 0 rellenar todas las celdas con números aleatorios entre 0 y 100
         $("#btn0").click(function(){
+            tabla(20,20,"panel");
+        });
+
+
+
+
+
+        //Al pulsar el botón 6 poner de color azul todas las celdas que contienen numeros pares.
+        $("#btn6").click(function(){
             $("td").each(function(){
                 if($(this).text()%2==0){
                     $(this).css("background-color","blue");
@@ -86,11 +95,25 @@
 
         //Al pulsar botón 3 vaciar todas las celdas que terminen en la cifra que hay en texto.
         $("#btn3").click(function(){
-            const num = $("#texto").text();
+            const num = $("#texto").val();
             $("td").each(function(){
                 if($(this).text()%10==num){
-                    $(this).css("color","red"); //text("");
+                    $(this).text("");
                 }
+            });
+        });
+
+        //Al pulsar botón 5 mostrar los números de la tabla ordenados
+        $("#btn5").click(function(){
+            let numeros = [];
+            $("td").each(function(){
+                numeros.push(parseInt($(this).text()));
+            });
+            numeros.sort(function(a,b){return a-b});
+            let i=0;
+            $("td").each(function(){
+                $(this).text(numeros[i]);
+                i++;
             });
         });
 
