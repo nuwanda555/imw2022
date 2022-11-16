@@ -57,9 +57,15 @@
         tabla(20,20,"panel");
         botones(30);
 
-        $("button").click(function(){
-            $("p").hide();
+        //Al pulsar el botón 0 poner de color azul todas las celdas que contienen numeros pares.
+        $("#btn0").click(function(){
+            $("td").each(function(){
+                if($(this).text()%2==0){
+                    $(this).css("background-color","blue");
+                }
+            });
         });
+
     });
 
 </script>
