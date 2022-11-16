@@ -66,6 +66,35 @@
             });
         });
 
+        //Al pulsar el botón 1 poner de color naranja todas las celdas que contienen numeros que acaben en 7.
+        $("#btn1").click(function(){
+            $("td").each(function(){
+                if($(this).text()%10==7){
+                    $(this).css("background-color","orange");
+                }
+            });
+        });
+
+        $("#btn2").click(function(){
+            let suma=0;
+            $("td").each(function(){
+                suma=suma+parseInt($(this).text());    
+            });
+
+            $("#btn2").text(suma);
+        });
+
+        //Al pulsar botón 3 vaciar todas las celdas que terminen en la cifra que hay en texto.
+        $("#btn3").click(function(){
+            const num = $("#texto").text();
+            $("td").each(function(){
+                if($(this).text()%10==num){
+                    $(this).css("color","red"); //text("");
+                }
+            });
+        });
+
+
     });
 
 </script>
@@ -74,6 +103,7 @@
     <div id="panel">
 
     </div>   
+    <div>Texto: <input type="text" id="texto"></div>  
     <div id="botones">
         
     </div>
