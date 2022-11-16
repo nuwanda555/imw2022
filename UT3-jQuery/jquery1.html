@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<style>
+    #panel {
+       border: 2px solid orange;
+       border-radius: 20px;
+       padding: 20px;
+       margin: 20px;
+    }
+</style>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+
+        $("#cargar").click(function(){
+            const texto= $("#texto").val();
+
+
+            $.ajax({
+                url: "https://pokeapi.co/api/v2/pokemon",
+                type: "GET",
+                dataType: "json",
+                success: function(data){
+                    const pokemons=data.results;
+                    pokemons.forEach(function(pokemon){
+                        $("#panel").append(`<a href='${pokemon.url}'>${pokemon.name}</a><br>`);
+                    })
+                }
+                ,error : function() {
+                    alert('Disculpe, existió un problema');
+                }
+            })
+        });
+    });
+
+</script>
+</head>
+
+<body>
+    Texto: <input type="text" id="texto" value="Hola">
+    <button id="cargar">Cargar</button>
+
+    <div id="panel">
+            hola
+    </div>
+
+</body>
+</html>
