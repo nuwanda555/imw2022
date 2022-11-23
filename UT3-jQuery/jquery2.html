@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        td{
+            border: 1px solid orange;
+            border-radius: 5px;
+            padding: 5px;
+        }
+
+        table {
+            margin: 50px;
+        }
+
+        button {
+            margin: 5px;
+        }
+    </style>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+
+    //crear una función tabla (n,n, elemento) que crea una tabla de nxn en el elemento indicado
+    function tabla(f,c,id){
+        let html = "<table>";
+        for(let i=0;i<f;i++){
+            let fila = "<tr>";
+            for(let j=0;j<c;j++){
+                //num es un número aleatorio entre 0 y 1000
+                let num = Math.floor(Math.random()*1000);
+                html=html+`<td>${num}</td>`;    
+            }
+            html+="</tr>";   
+        }
+        html += "</table>";
+        $("#"+id).html(html);
+    }
+
+
+    function botones(num){
+        let html = "";
+        for(let i=0;i<num;i++){
+            html += `<button id="btn${i}">Botón ${i}</button>`;
+        }
+        $("#botones").append(html);
+    }
+
+
+
+    $(document).ready(function(){
+
+        tabla(20,20,"panel");
+        botones(30);
+
+        //al pulsar botón 0 rellenar todas las celdas con números aleatorios entre 0 y 100
+        $("#btn0").click(function(){
+            tabla(20,20,"panel");
+        });
+
+
+
+
+
+        //Al pulsar el botón 6 poner de color azul todas las celdas que contienen numeros pares.
+        $("#btn6").click(function(){
+            $("td").each(function(){
+                if($(this).text()%2==0){
+                    $(this).css("background-color","blue");
+                }
+            });
+        });
+
+        //Al pulsar el botón 1 poner de color naranja todas las celdas que contienen numeros que acaben en 7.
+        $("#btn1").click(function(){
+            $("td").each(function(){
+                if($(this).text()%10==7){
+                    $(this).css("background-color","orange");
+                }
+            });
+        });
+
+        $("#btn2").click(function(){
+            let suma=0;
+            $("td").each(function(){
+                suma=suma+parseInt($(this).text());    
+            });
+
+            $("#btn2").text(suma);
+        });
+
+        //Al pulsar botón 3 vaciar todas las celdas que terminen en la cifra que hay en texto.
+        $("#btn3").click(function(){
+            const num = $("#texto").val();
+            $("td").each(function(){
+                if($(this).text()%10==num){
+                    $(this).text("");
+                }
+            });
+        });
+
+        //Al pulsar botón 5 mostrar los números de la tabla ordenados
+        $("#btn5").click(function(){
+            let numeros = [];
+            $("td").each(function(){
+                numeros.push(parseInt($(this).text()));
+            });
+            numeros.sort(function(a,b){return a-b});
+            let i=0;
+            $("td").each(function(){
+                $(this).text(numeros[i]);
+                i++;
+            });
+        });
+
+        //Al pulsar botón 9 mostrar en cada celda la imagen de un pokémon al azar.
+        $("#btn9").click(function(){
+            $("td").each(function(){
+                let num = Math.floor(Math.random()*898);
+                $(this).html(`<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${num}.png" width="50px">`);
+            });
+        });
+
+        //Al pulsar botón 10 mostrar en cada celda la imagen de un pokémon al azar sin repetir ninguno.
+        $("#btn10").click(function(){
+            let numeros = [];
+            for(let i=0;i<898;i++){
+                numeros.push(i);
+            }
+            numeros.sort(function(a,b){return Math.random()-0.5});
+            let i=0;
+            $("td").each(function(){
+                $(this).html(`<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${numeros[i]}.png" width="50px">`);
+                i++;
+            });
+        });
+
+        //Al pulsar botón 11 poner de color amarillo todas las celdas que contengan los números que hay en texto separados por coma. 
+        $("#btn11").click(function(){
+            const num = $("#texto").val();
+            const numeros = num.split(",");
+            $("td").each(function(){
+                if(numeros.includes($(this).text())){
+                    $(this).css("background-color","yellow");
+                }
+            });
+        });
+
+        //Al pulsar botón 12 vaciar todas las celdas de la columna cuyo número está en texto.
+        $("#btn12").click(function(){
+            const num = $("#texto").val();
+            $("td").each(function(){
+                if($(this).index()==num){
+                    $(this).text("");
+                }
+            });
+        });
+
+        //Al pulsar botón 13 poner de color naranja las celdas de la fila y la columna que están en texto separados por un asterisco, suponiendo que el número de fila y columna empieza en 1.
+        $("#btn13").click(function(){
+            const num = $("#texto").val();
+            const numeros = num.split("*");
+            const fila = numeros[0]-1;
+            const columna = numeros[1]-1;
+            $("td").each(function(){
+                if($(this).index()==columna || $(this).parent().index()==fila){
+                    $(this).css("background-color","orange");
+                }
+            });
+        });
+
+        //Al pulsar botón 14 escribir en texto el número mayor y menor de todas las celdas de la tabla.
+        $("#btn14").click(function(){
+            let numeros = [];
+            $("td").each(function(){
+                numeros.push(parseInt($(this).text()));
+            });
+            numeros.sort(function(a,b){return a-b});
+            $("#texto").val(numeros[0]+","+numeros[numeros.length-1]);
+        });
+
+        //Al pulsar botón 15 poner en todas las celdas de las filas pares el valor más pequeño de la tabla y en las filas impares el valor más grande.
+        $("#btn15").click(function(){
+            let minimo = 1000;
+            let maximo = 0;
+            $("td").each(function(){
+                if(parseInt($(this).text())<minimo){
+                    minimo = parseInt($(this).text());
+                }
+                if(parseInt($(this).text())>maximo){
+                    maximo = parseInt($(this).text());
+                }
+            });
+            $("tr").each(function(){
+                if($(this).index()%2==0){
+                    $(this).find("td").text(minimo);
+                }else{
+                    $(this).find("td").text(maximo);
+                }
+            });
+        });
+
+        //Al pulsar botón 16 poner de color rosado todas las celdas que contengan un número primo.
+        $("#btn16").click(function(){
+            $("td").each(function(){
+                let num = parseInt($(this).text());
+                let esPrimo = true;
+                for(let i=2;i<num;i++){
+                    if(num%i==0){
+                        esPrimo = false;
+                    }
+                }
+                if(esPrimo){
+                    $(this).css("background-color","pink");
+                }
+            });
+        });
+
+        //Al pulsar botón 17 poner de color verde las celdas cuyas cifras sumen el valor que hay en texto.
+        $("#btn17").click(function(){
+            const num = $("#texto").val();
+            $("td").each(function(){
+                let suma = 0;
+                for(let i=0;i<$(this).text().length;i++){
+                    suma = suma + parseInt($(this).text()[i]);
+                }
+                if(suma==num){
+                    $(this).css("background-color","green");
+                }
+            });
+        });
+
+        //Al pulsar botón 19 poner de color azul todas las celdas que empiezan y acaban con la misma cifra.
+        $("#btn19").click(function(){
+            $("td").each(function(){
+                if($(this).text()[0]==$(this).text()[$(this).text().length-1]){
+                    $(this).css("background-color","blue");
+                }
+            });
+        });
+      
+        //Al pulsar botón 21 poner de color amarillo todas las celdas donde esté el número que más veces se repite. También escribir ese número en texto.
+        $("#btn21").click(function(){
+            let numeros = [];
+            $("td").each(function(){
+                numeros.push(parseInt($(this).text()));
+            });
+            let maximo = 0;
+            let numeroMaximo = 0;
+            for(let i=0;i<numeros.length;i++){
+                let contador = 0;
+                for(let j=0;j<numeros.length;j++){
+                    if(numeros[i]==numeros[j]){
+                        contador++;
+                    }
+                }
+                if(contador>maximo){
+                    maximo = contador;
+                    numeroMaximo = numeros[i];
+                }
+            }
+            $("#texto").val(numeroMaximo);
+            $("td").each(function(){
+                if($(this).text()==numeroMaximo){
+                    $(this).css("background-color","yellow");
+                }
+            });
+        });
+
+        //Al pulsar botón 22 poner en negrita y de color rojo las celdas que la raíz cuadrada del número que contiene sea un número entero.
+        $("#btn22").click(function(){
+            $("td").each(function(){
+                let num = parseInt($(this).text());
+                let raiz = Math.sqrt(num);
+                if(raiz%1==0){
+                    $(this).css("font-weight","bold");
+                    $(this).css("color","red");
+                }
+            });
+        });
+     
+        //Al pulsar botón 23 poner en las celdas con números pares un botón cuyo texto sea el número de la celda, y al pulsar el botón desaparece el propio botón y aparece otra vez el número.
+        $("#btn23").click(function(){
+            $("td").each(function(){
+                if($(this).text()%2==0){
+                    $(this).html("<button>"+$(this).text()+"</button>");
+                }
+            });
+            $("button").click(function(){
+                $(this).parent().html($(this).text());
+            });
+        });
+
+        //Al pulsar botón 24 cuando pase sobre una celda se pondrá de color amarillo y al salir de la celda se pondrá otra vez blanca.
+        $("#btn24").click(function(){
+            $("td").mouseover(function(){
+                $(this).css("background-color","yellow");
+            });
+            $("td").mouseout(function(){
+                $(this).css("background-color","white");
+            });
+        });
+
+        //Al pulsar botón 25 cuando pinche sobre una celda se pondrá en la celda el número en romano equivalente al número que contiene.
+        $("#btn25").click(function(){
+            $("td").click(function(){
+                let num = parseInt($(this).text());
+                let romano = "";
+                while(num>=1000){
+                    romano = romano + "M";
+                    num = num - 1000;
+                }
+                if(num>=900){
+                    romano = romano + "CM";
+                    num = num - 900;
+                }
+                if(num>=500){
+                    romano = romano + "D";
+                    num = num - 500;
+                }
+                if(num>=400){
+                    romano = romano + "CD";
+                    num = num - 400;
+                }
+                while(num>=100){
+                    romano = romano + "C";
+                    num = num - 100;
+                }
+                if(num>=90){
+                    romano = romano + "XC";
+                    num = num - 90;
+                }
+                if(num>=50){
+                    romano = romano + "L";
+                    num = num - 50;
+                }
+                if(num>=40){
+                    romano = romano + "XL";
+                    num = num - 40;
+                }
+                while(num>=10){
+                    romano = romano + "X";
+                    num = num - 10;
+                }
+                if(num>=9){
+                    romano = romano + "IX";
+                    num = num - 9;
+                }
+                if(num>=5){
+                    romano = romano + "V";
+                    num = num - 5;
+                }
+                if(num>=4){
+                    romano = romano + "IV";
+                    num = num - 4;
+                }
+                while(num>=1){
+                    romano = romano + "I";
+                    num = num - 1;
+                }
+                $(this).text(romano);
+            });
+        });
+
+        //Al pulsar botón 26 cuando pinche sobre una celda escribir en texto el equivalente en binario al número de la celda. Además la celda se pondrá con color de fondo rosado.
+        $("#btn26").click(function(){
+            $("td").click(function(){
+                let num = parseInt($(this).text());
+                let binario = "";
+                while(num>=1){
+                    binario = (num%2) + binario;
+                    num = Math.floor(num/2);
+                }
+                $("#texto").val(binario);
+                $(this).css("background-color","pink");
+            });
+        });
+
+        //Al pulsar botón 27 pintar las celdas de tabla para que parezca un tablero de ajedrez con celdas rojas y azules.
+        $("#btn27").click(function(){
+            $("td").each(function(){
+                let fila = $(this).parent().index();
+                let columna = $(this).index();
+                if((fila+columna)%2==0){
+                    $(this).css("background-color","red");
+                }else{
+                    $(this).css("background-color","blue");
+                }
+            });
+        });
+       
+        //Al pulsar botón 28 cuando se pulse en una celda poner de amarillo el color de fondo de todas las celdas que tengan un número mayor que la celda que se pulsó.
+        $("#btn28").click(function(){
+            $("td").click(function(){
+                let num = parseInt($(this).text());
+                $("td").each(function(){
+                    if(parseInt($(this).text())>num){
+                        $(this).css("background-color","yellow");
+                    }
+                });
+            });
+        });
+        
+      
+
+
+    });
+
+</script>
+</head>
+<body>
+    <div id="panel">
+
+    </div>   
+    <div>Texto: <input type="text" id="texto"></div>  
+    <div id="botones">
+        
+    </div>
+</body>
+</html>
