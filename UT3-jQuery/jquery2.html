@@ -103,6 +103,17 @@
             });
         });
 
+        //Al pulsar botón 4 mostrar en la última celda de la tabla la imagen del pokémon cuyo nombre está escrito en texto.
+        $("#btn4").click(function(){
+            const nombre = $("#texto").val();
+            const url = `https://pokeapi.co/api/v2/pokemon/${nombre}`;
+            $.get(url,function(data){
+                console.log(data)
+                const img = data.sprites.front_default;
+                $("td").last().html(`<img src="${img}" alt="${nombre}">`);
+            });
+        });
+
         //Al pulsar botón 5 mostrar los números de la tabla ordenados
         $("#btn5").click(function(){
             let numeros = [];
@@ -117,6 +128,28 @@
             });
         });
 
+        //Al pulsar botón 9 mostrar en cada celda la imagen de un pokémon al azar.
+        $("#btn9").click(function(){
+            $("td").each(function(){
+                const num = Math.floor(Math.random()*898);
+                const url = `https://pokeapi.co/api/v2/pokemon/${num}`;
+                $.get(url,function(data){
+                    const img = data.sprites.front_default;
+                    $(this).html(`<img src="${img}" alt="${num}">`);
+                });
+            });
+        });
+
+
+        //Al pulsar el botón 29 mostrar en la primera celda de la tabla la longitud y latitud de la estación espacial internacional
+        $("#btn29").click(function(){
+            $.ajax({
+                url: "https://api.wheretheiss.at/v1/satellites/25544",
+                success: function(result){
+                    $("#panel td:first").text(result.latitude+" "+result.longitude);
+                }
+            });
+        });
 
     });
 
