@@ -20,7 +20,7 @@ $conexion->set_charset("utf8");
 
 $municipio = $_GET['municipio'];
 //consulta
-$consulta = "SELECT Codigo, Denominacion,longitud,latitud FROM centros WHERE Municipio='$municipio' ";
+$consulta = "SELECT Codigo, Denominacion, Direccion, Localidad, longitud,latitud FROM centros WHERE Municipio='$municipio' ";
 
 //ejecutar consulta
 $resultado = $conexion->query($consulta);
@@ -32,6 +32,8 @@ echo "  <thead>
             <tr>   
                 <th>codigo</th>
                 <th>denominacion</th>
+                <th>Dirección</th>
+                <th>Localidad</th>
                 <th>Borrar</th>
                 <th>Mapa</th>
             </tr>
@@ -40,6 +42,8 @@ echo "<tbody>";
 while ($fila = $resultado->fetch_object()) {
     $codigo = $fila->Codigo;
     $denominacion = $fila->Denominacion;
+    $direccion =$fila->Direccion;
+    $localidad =$fila->Localidad;
     $longitud = $fila->longitud;
     $latitud = $fila->latitud;
     $linkBorrar = "<a class='link_borrar' href='borrar_centros.php?codigo=$codigo&municipio=$municipio'><img width='32px' src='https://cdn-icons-png.flaticon.com/512/1214/1214428.png'></a>";
@@ -53,7 +57,7 @@ while ($fila = $resultado->fetch_object()) {
     // https://www.openstreetmap.org/#map=18/37.17778/-3.59861
     //$linkMapa = "<a class='link_mapa' href=https://www.openstreetmap.org/#map=18/$latitud/$longitud'>Mapa</a>";
 
-    echo "<tr><td>$codigo</td><td>$denominacion</td><td>$linkBorrar</td><td>$linkMapa</td></tr>";
+    echo "<tr data-codigo='$codigo'><td>$codigo</td><td contenteditable data-campo='denominacion'>$denominacion</td><td contenteditable data-campo='direccion'>$direccion</td><td contenteditable data-campo='localidad'>$localidad</td><td>$linkBorrar</td><td>$linkMapa</td></tr>";
 
 }
 echo "</tbody></table></div>";
@@ -64,13 +68,49 @@ echo "</tbody></table></div>";
     $(document).ready(function() {
 
         $('#tabla_centros').DataTable({
-        //Sin paginación
-        "paging": false,
-        
-        "columnDefs": [
-          { "orderable": false, "targets": 0 },//ocultar para columna 1
-        ],
-    });
+            //Sin paginación
+            "paging": false,
+            
+            "columnDefs": [
+            { "orderable": false, "targets": 0 },//ocultar para columna 1
+            ],
+        });
+
+        //Al hacer click en un td editable
+        $('td[contenteditable]').on('focusout', function() {
+            
+            const valor=$(this).text();
+            const campo=$(this).data('campo');   //
+            const codigo = $(this).parent().data('codigo'); //obtener el codigo del centro
+
+            alert(
+                'valor: '+valor+
+                'campo: '+campo+
+                'codigo: '+codigo
+            );
+
+           /* 
+            var campo = $(this).data('campo');
+            var valor = $(this).text();
+            var codigo = $(this).parent().find('td:first').text();
+            var municipio = '<?php echo $municipio; ?>';
+            //alert(campo + ' ' + valor + ' ' + codigo);
+            $.ajax({
+                url: 'actualizar_centros.php',
+                type: 'POST',
+                data: {
+                    campo: campo,
+                    valor: valor,
+                    codigo: codigo,
+                    municipio: municipio
+                },
+                success: function(respuesta) {
+                    //alert(respuesta);
+                }
+            });
+
+            */
+        });
 
 
     });

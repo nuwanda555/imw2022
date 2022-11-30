@@ -1,0 +1,104 @@
+<script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=ArEa1rgs3SfHTJuvTNbDDAYLVTlQfCHeTUu5bbRlwU6DuTR5YvBT3MkYqCkaPGYR' defer></script>
+ <!-- usar librería jquery --> 
+<script type='text/javascript' src='https://code.jquery.com/jquery-3.3.1.min.js'></script>
+ 
+<style>
+   #mapDiv {
+       margin: 0 auto;
+       width: 95%;
+       height: 75%;
+   }
+</style>
+ 
+ 
+ 
+<div class="container">
+    <select id="icono">
+        <option value="https://aux.iconspalace.com/uploads/13270996061937856141.png">Homer</option>
+        <option value="https://icons.iconarchive.com/icons/jonathan-rey/simpsons/256/Bart-Simpson-01-icon.png">Bart</option>
+        <option value="https://sites.google.com/site/eluniversodelossimpsons/_/rsrc/1444753028206/maggie-simpsons/Maggie-Simpson-icon.png">Maggie</option>
+    </select>
+
+    Autor: <input type="text" id="nombre" value="Mario" />
+    <input type="button" value="Cargar marcas" onclick="cargarMarcas()" />
+
+    <div id='mapDiv'></div>
+</div>
+  
+ 
+<script>
+   let map;
+
+    function cargarMarcas(){
+        //obtener todas las marcas de nombre usando ajax
+        let nombre = $("#nombre").val();
+        $.ajax({
+            url: "http://localhost:8000/get_marcas.php",
+            data: {
+                nombre: nombre
+            },
+            success: function(data){
+                let marcas = JSON.parse(data);  //convertir a formato json
+                marcas.forEach(function(marca) {    //recorro todas las marcas, en cada momento la marca actual es marca
+                    let icono = marca.icono;
+                    if (icono == null) icono = "https://cdn.icon-icons.com/icons2/325/PNG/256/Question-mark-icon_34771.png";
+                    const centro=new Microsoft.Maps.Location(marca.latitud, marca.longitud);
+                    let pushpin = new Microsoft.Maps.Pushpin(centro, {icon: icono});
+                    map.entities.push(pushpin);
+                });
+            }
+        });
+        
+
+
+    }
+
+
+
+  
+   function getMap() {
+       let mapOptions = {  //objeto para crear un mapa
+           mapTypeId: Microsoft.Maps.MapTypeId.aerial,
+           showMapTypeSelector: false,
+           zoom:15,
+           center: new Microsoft.Maps.Location(45.438329,12.318717),
+       };
+       // Initialize the map
+
+       map = new Microsoft.Maps.Map(document.getElementById("mapDiv"), mapOptions);
+
+        //Create a pushpin.
+        let pushpin = new Microsoft.Maps.Pushpin(map.getCenter());
+        map.entities.push(pushpin);
+
+        //programar el evento click sobre map
+        Microsoft.Maps.Events.addHandler(map, 'click', function (e) { 
+             //Create a pushpin.
+            let pushpin = new Microsoft.Maps.Pushpin(e.location,{icon: document.getElementById("icono").value});
+            map.entities.push(pushpin);
+
+            //programar que al pulsar sobre un pushpin se borre
+            Microsoft.Maps.Events.addHandler(pushpin, 'click', function (e) { 
+                    //borrar el pushpin
+                    map.entities.remove(e.target);
+            });
+
+            const longitud= e.location.longitude;
+            const latitud= e.location.latitude;
+            const nombre=document.getElementById("nombre").value;
+            const icono=document.getElementById("icono").value;
+
+            fetch(`http://localhost:8000/guardar_posiciones.php?longitud=${longitud}&latitud=${latitud}&nombre=${nombre}&icono=${icono}`);
+        });
+
+
+   }
+ 
+    window.onload = function() {
+            getMap();
+    }
+ 
+  
+</script>
+ 
+ 
